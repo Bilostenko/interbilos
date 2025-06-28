@@ -1,4 +1,6 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import type { PayloadAction } from "@reduxjs/toolkit";
+import { parseFileToText } from "../utils/fileParser";
 
 export interface Template {
   id: string;
@@ -19,48 +21,54 @@ interface RequestProcessingState {
 
 const initialState: RequestProcessingState = {
   uploadedFile: null,
-  analysisData: '',
-  verificationData: '',
+  analysisData: "",
+  verificationData: "",
   selectedTemplate: null,
-  generatedResponse: '',
+  generatedResponse: "",
   isAnalyzing: false,
   isGeneratingResponse: false,
   error: null,
 };
 
-// Async thunk for file analysis
-export const analyzeFile = createAsyncThunk(
-  'requestProcessing/analyzeFile',
-  async (file: File, { rejectWithValue }) => {
+// 🟢 Парсинг файлу
+export const analyzeFile = createAsyncThunk<
+  string,
+  File,
+  { rejectValue: string }
+>(
+  "requestProcessing/analyzeFile",
+  async (file, { rejectWithValue }) => {
     try {
-      // Simulate API call for file analysis
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      return `Document analysis complete for "${file.name}":\n\n• Document type: ${file.type}\n• File size: ${(file.size / 1024).toFixed(2)} KB\n• Analysis status: Ready for verification`;
+      const text = await parseFileToText(file);
+      return `Parsed text:\n\n${text.slice(0, 500)}...`;
     } catch (error) {
-      return rejectWithValue('Failed to analyze file');
+      console.error("Analyze error:", error);
+      return rejectWithValue("Failed to analyze file");
     }
   }
 );
 
-// Async thunk for response generation
-export const generateResponse = createAsyncThunk(
-  'requestProcessing/generateResponse',
-  async (params: { template: Template; verificationData: string; fileName?: string }, { rejectWithValue }) => {
+// 🟢 Генерація відповіді
+export const generateResponse = createAsyncThunk<
+  string,
+  { template: Template; verificationData: string; fileName?: string },
+  { rejectValue: string }
+>(
+  "requestProcessing/generateResponse",
+  async (params, { rejectWithValue }) => {
     try {
-      // Simulate API call for response generation
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
       const { template, verificationData, fileName } = params;
-      return `Response generated using ${template.name}:\n\n${template.content}\n\nVerification Data:\n${verificationData}\n\nDocument: ${fileName || 'No file uploaded'}`;
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      return `Response generated using ${template.name}:\n\n${template.content}\n\nVerification Data:\n${verificationData}\n\nDocument: ${fileName || "No file uploaded"}`;
     } catch (error) {
-      return rejectWithValue('Failed to generate response');
+      console.error("Generate response error:", error);
+      return rejectWithValue("Failed to generate response");
     }
   }
 );
 
 const requestProcessingSlice = createSlice({
-  name: 'requestProcessing',
+  name: "requestProcessing",
   initialState,
   reducers: {
     setUploadedFile: (state, action: PayloadAction<File>) => {
@@ -80,7 +88,6 @@ const requestProcessingSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // File analysis cases
       .addCase(analyzeFile.pending, (state) => {
         state.isAnalyzing = true;
         state.error = null;
@@ -93,7 +100,6 @@ const requestProcessingSlice = createSlice({
         state.isAnalyzing = false;
         state.error = action.payload as string;
       })
-      // Response generation cases
       .addCase(generateResponse.pending, (state) => {
         state.isGeneratingResponse = true;
         state.error = null;

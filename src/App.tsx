@@ -1,4 +1,3 @@
-// App.tsx
 import React, { useEffect } from 'react';
 import { Provider } from 'react-redux';
 import { store } from './store/store';
@@ -9,13 +8,13 @@ import { VerificationInput } from './components/VerificationInput';
 import { TemplateSelection } from './components/TemplateSelection';
 import { ResponseDisplay } from './components/ResponseDisplay';
 import { useAppDispatch, useAppSelector } from './store/hooks';
+import type { Template } from './store/requestProcessingSlice';
 import {
   setUploadedFile,
   setVerificationData,
   setSelectedTemplate,
   analyzeFile,
   generateResponse,
-  Template,
 } from './store/requestProcessingSlice';
 
 const MainContent: React.FC = () => {
