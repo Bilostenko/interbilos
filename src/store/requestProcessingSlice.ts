@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { parseFileToText } from "../utils/fileParser";
-import OpenAI from "openai";
 
 export interface Template {
   id: string;
@@ -32,9 +31,6 @@ const initialState: RequestProcessingState = {
 };
 
 
-const openai = new OpenAI({
-  apiKey: import.meta.env.VITE_OPENAI_API_KEY
-});
 
 // 🟢 Парсинг файлу
 export const analyzeFile = createAsyncThunk<
@@ -45,35 +41,29 @@ export const analyzeFile = createAsyncThunk<
   "requestProcessing/analyzeFile",
   async (file, { rejectWithValue }) => {
     try {
-      // 1️⃣ Парсимо файл
       const text = await parseFileToText(file);
 
-      // 2️⃣ Викликаємо GPT для стислого переказу
-      const completion = await openai.chat.completions.create({
-        model: "gpt-4o-mini", // або будь-який інший
-        messages: [
-          {
-            role: "system",
-            content:
-              "Ти помічник, який робить стислий переказ офіційних документів українською мовою. Надай тільки найважливіші дані: тему, відправника, дату, короткий зміст суті запиту."
-          },
-          {
-            role: "user",
-            content: `Зроби стислий переказ цього тексту:\n\n${text}`
-          }
-        ],
-        temperature: 0.2
+      const response = await fetch("/api/analyze", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ text })
       });
 
-      const summary = completion.choices[0].message.content;
+      if (!response.ok) {
+        throw new Error(`API error: ${response.statusText}`);
+      }
 
-      return summary || "Не вдалося створити переказ";
+      const data = await response.json();
+      return data.summary || "Не вдалося створити переказ";
     } catch (error) {
       console.error("Analyze error:", error);
       return rejectWithValue("Не вдалося проаналізувати файл");
     }
   }
 );
+
 
 // 🟢 Генерація відповіді
 export const generateResponse = createAsyncThunk<
