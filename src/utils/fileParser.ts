@@ -3,7 +3,7 @@ import mammoth from "mammoth";
 
 
 
-// Головна функція - її імпортуєш у thunk
+// Головна функція 
 export const parseFileToText = async (file: File): Promise<string> => {
   const fileType = file.type;
 
