@@ -15,16 +15,16 @@ export const ResponseDisplay: React.FC<ResponseDisplayProps> = ({
     }
   };
 
- return (
+return (
   <div className="px-4 py-3">
-    <h3 className="text-[#101418] text-lg font-bold leading-tight tracking-[-0.015em] pb-2 pt-4">
-      5. Download Response
-    </h3>
-    <div className="flex justify-end">
+    <div className="flex items-center justify-between">
+      <h3 className="text-[#101418] text-lg font-bold leading-tight tracking-[-0.015em]">
+        5. Download Response
+      </h3>
       <button
         onClick={handleDownload}
         disabled={isGenerating}
-        className={`flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 text-sm font-bold leading-normal tracking-[0.015em] transition-colors ${
+        className={`flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 text-sm font-bold leading-normal tracking-[0.015em] transition-colors ${
           !isGenerating
             ? 'bg-[#dce7f3] text-[#101418] hover:bg-[#c8daf0]'
             : 'bg-gray-200 text-gray-400 cursor-not-allowed'
