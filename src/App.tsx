@@ -100,7 +100,7 @@ const MainContent: React.FC = () => {
             />
             
             <VerificationInput 
-              onDataChange={handleVerificationDataChange}
+              onDataSubmit={handleVerificationDataChange}
               initialValue={verificationData}
             />
             
@@ -109,7 +109,6 @@ const MainContent: React.FC = () => {
             />
             
             <ResponseDisplay 
-              response={generatedResponse}
               onDownload={handleDownloadResponse}
               isGenerating={isGeneratingResponse}
             />
