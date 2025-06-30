@@ -9,7 +9,7 @@ export interface AnalysisResult {
   summary: string;
 }
 interface AIAnalysisProps {
-  analysisData?: AnalysisResult;
+  analysisData: AnalysisResult | undefined;
   isLoading?: boolean;
 }
 

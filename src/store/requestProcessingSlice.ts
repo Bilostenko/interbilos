@@ -11,7 +11,7 @@ export interface Template {
 
 interface RequestProcessingState {
   uploadedFile: File | null;
-  analysisData: AnalysisResult | null;
+  analysisData: AnalysisResult | undefined;
   verificationData: string;
   selectedTemplate: Template | null;
   generatedResponse: string;
@@ -22,7 +22,7 @@ interface RequestProcessingState {
 
 const initialState: RequestProcessingState = {
   uploadedFile: null,
-  analysisData: null,
+  analysisData: undefined,
   verificationData: "",
   selectedTemplate: null,
   generatedResponse: "",
