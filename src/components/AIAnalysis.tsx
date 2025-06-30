@@ -7,6 +7,7 @@ export interface AnalysisResult {
   subject: string;
   items: string;
   summary: string;
+  checks: string[];
 }
 interface AIAnalysisProps {
   analysisData: AnalysisResult | undefined;
@@ -29,16 +30,27 @@ export const AIAnalysis: React.FC<AIAnalysisProps> = ({
             <span className="ml-2 text-[#5c728a]">Analyzing document...</span>
           </div>
         ) : analysisData ? (
-          <div className="text-[#101418] text-base font-normal leading-normal">
-            <div className="p-4 space-y-3">
-                 <p>✅ <strong>Дата:</strong> {analysisData.date}</p>
-                 <p>✅ <strong>Відправник:</strong> {analysisData.sender}</p>
-                 <p>✅ <strong>Референс справи:</strong> {analysisData.reference}</p>
-                 <p>✅ <strong>Тема:</strong> {analysisData.subject}</p>
-                 <p>✅ <strong>Імена/Предмет запиту:</strong> {analysisData.items}</p>
-                 <p>✅ <strong>Короткий зміст:</strong> {analysisData.summary}</p>
-             </div>
-          </div>
+         <div className="text-[#101418] text-base font-normal leading-normal">
+    <div className="p-4 space-y-3">
+      <p>✅ <strong>Дата:</strong> {analysisData.date}</p>
+      <p>✅ <strong>Відправник:</strong> {analysisData.sender}</p>
+      <p>✅ <strong>Референс справи:</strong> {analysisData.reference}</p>
+      <p>✅ <strong>Тема:</strong> {analysisData.subject}</p>
+      <p>✅ <strong>Імена/Предмет запиту:</strong> {analysisData.items}</p>
+      <p>✅ <strong>Короткий зміст:</strong> {analysisData.summary}</p>
+
+      {analysisData.checks && analysisData.checks.length > 0 && (
+        <div>
+          <p>✅ <strong>Що потрібно перевірити:</strong></p>
+          <ul className="list-disc pl-5 space-y-1">
+            {analysisData.checks.map((item, idx) => (
+              <li key={idx}>{item}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+  </div>
         ) : (
           <p className="text-[#5c728a] text-base font-normal leading-normal">
             AI analysis will be displayed here after document upload.
