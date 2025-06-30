@@ -1,6 +1,6 @@
 import React from 'react';
 
-interface AnalysisResult {
+export interface AnalysisResult {
   date: string;
   sender: string;
   reference: string;

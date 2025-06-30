@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { parseFileToText } from "../utils/fileParser";
+import type { AnalysisResult } from "../components/AIAnalysis";
 
 export interface Template {
   id: string;
@@ -10,7 +11,7 @@ export interface Template {
 
 interface RequestProcessingState {
   uploadedFile: File | null;
-  analysisData: string;
+  analysisData: AnalysisResult | null;
   verificationData: string;
   selectedTemplate: Template | null;
   generatedResponse: string;
@@ -21,7 +22,7 @@ interface RequestProcessingState {
 
 const initialState: RequestProcessingState = {
   uploadedFile: null,
-  analysisData: "",
+  analysisData: null,
   verificationData: "",
   selectedTemplate: null,
   generatedResponse: "",
@@ -34,7 +35,7 @@ const initialState: RequestProcessingState = {
 
 // 🟢 Парсинг файлу
 export const analyzeFile = createAsyncThunk<
-  string,
+  AnalysisResult,
   File,
   { rejectValue: string }
 >(
@@ -56,7 +57,10 @@ export const analyzeFile = createAsyncThunk<
       }
 
       const data = await response.json();
-      return data.summary || "Не вдалося створити переказ";
+      if (!data.summary) {
+        throw new Error("Не вдалося створити переказ");
+      }
+      return data.summary as AnalysisResult;
     } catch (error) {
       console.error("Analyze error:", error);
       return rejectWithValue("Не вдалося проаналізувати файл");

@@ -46,8 +46,8 @@ export default async function handler(req, res) {
       temperature: 0.2,
     });
 
-   const summary = JSON.parse(completion.choices[0].message.content);
-res.status(200).json({ summary });
+     const summary = JSON.parse(completion.choices[0].message.content);
+     res.status(200).json({ summary });
   } catch (error) {
     console.error("OpenAI error:", error);
     res.status(500).json({ error: "Failed to create summary" });
