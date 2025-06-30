@@ -1,7 +1,15 @@
 import React from 'react';
 
+interface AnalysisResult {
+  date: string;
+  sender: string;
+  reference: string;
+  subject: string;
+  items: string;
+  summary: string;
+}
 interface AIAnalysisProps {
-  analysisData?: string;
+  analysisData?: AnalysisResult;
   isLoading?: boolean;
 }
 
@@ -22,7 +30,14 @@ export const AIAnalysis: React.FC<AIAnalysisProps> = ({
           </div>
         ) : analysisData ? (
           <div className="text-[#101418] text-base font-normal leading-normal">
-            {analysisData}
+            <div className="p-4 space-y-3">
+                 <p>✅ <strong>Дата:</strong> {analysisData.date}</p>
+                 <p>✅ <strong>Відправник:</strong> {analysisData.sender}</p>
+                 <p>✅ <strong>Референс справи:</strong> {analysisData.reference}</p>
+                 <p>✅ <strong>Тема:</strong> {analysisData.subject}</p>
+                 <p>✅ <strong>Імена/Предмет запиту:</strong> {analysisData.items}</p>
+                 <p>✅ <strong>Короткий зміст:</strong> {analysisData.summary}</p>
+             </div>
           </div>
         ) : (
           <p className="text-[#5c728a] text-base font-normal leading-normal">
