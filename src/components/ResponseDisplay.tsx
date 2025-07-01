@@ -17,9 +17,9 @@ export const ResponseDisplay: React.FC<ResponseDisplayProps> = ({
 
 return (
   <div className="px-4 py-3">
-    <div className="flex items-center justify-between">
+    <div className="flex items-center gap-2">
       <h3 className="text-[#101418] text-lg font-bold leading-tight tracking-[-0.015em]">
-        5. Download Response
+        5.
       </h3>
       <button
         onClick={handleDownload}
@@ -30,7 +30,7 @@ return (
             : 'bg-gray-200 text-gray-400 cursor-not-allowed'
         }`}
       >
-        <span className="truncate">Download Response</span>
+        <span className="truncate">СКАЧАТИ ВІДПОВІДЬ</span>
       </button>
     </div>
   </div>

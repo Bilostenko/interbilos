@@ -24,7 +24,7 @@ export const VerificationInput: React.FC<VerificationInputProps> = ({
   return (
   <div className="px-4 py-3">
     <h3 className="text-[#101418] text-lg font-bold leading-tight tracking-[-0.015em] pb-2 pt-4">
-      3. Verification Data Input
+      3. Введення даних для верифікації
     </h3>
     <div className="flex w-full flex-wrap items-end gap-4">
       <label className="flex flex-col w-full flex-1">
@@ -39,7 +39,7 @@ export const VerificationInput: React.FC<VerificationInputProps> = ({
         onClick={handleSubmit}
         className="flex h-10 items-center justify-center rounded-xl bg-[#dce7f3] px-4 text-sm font-bold text-[#101418] hover:bg-[#c8daf0] transition-colors"
       >
-        Send to AI
+        ДАЛІ
       </button>
     </div>
   </div>

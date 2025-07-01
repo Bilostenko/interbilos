@@ -78,10 +78,10 @@ const MainContent: React.FC = () => {
             <div className="flex flex-wrap justify-between gap-3 p-4">
               <div className="flex min-w-72 flex-col gap-3">
                 <p className="text-[#101418] tracking-light text-[32px] font-bold leading-tight">
-                  International Request Processing
+                  Автоматична оборока запитів
                 </p>
                 <p className="text-[#5c728a] text-sm font-normal leading-normal">
-                  Upload, analyze, verify, and respond to international police requests efficiently.
+                  Завантажуйте запит, а решту ми зробимо самі.
                 </p>
               </div>
             </div>
