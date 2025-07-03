@@ -59,9 +59,3 @@ export default async function handler(req, res) {
     res.status(500).json({ error: "Failed to create summary" });
   }
 }
-
-
-// Що ж давай продовжимо далі. 
-// 1. От же нам треба завантажити данні в секцію "3. Verification Data Input"
-// 2. Вибрати "4. Template Selection" (треба якось підвязати під цей шаблон конкретний файл word)
-// 3. В "5. Response Display" отримати можливість завантажити заповнений щаблон відповіді за допомогою кнопки Download response. 
