@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { templates } from "../data/templates"; // твій правильний список
 
 interface Template {
   id: string;
@@ -7,38 +8,18 @@ interface Template {
 }
 
 interface TemplateSelectionProps {
-  templates?: Template[];
   onTemplateSelect?: (template: Template | null) => void;
 }
 
-const defaultTemplates: Template[] = [
-  {
-    id: 'identification',
-    name: 'Ідентифікація особи',
-    content: 'This is an identification response template.'
-  },
-  {
-    id: 'rejection',
-    name: 'Відмова через недостатні дані',
-    content: 'This is a rejection response template because of lack of data.'
-  },
-  {
-    id: 'regional',
-    name: 'Направити на область',
-    content: 'This template is for sending to a specific region.'
-  }
-];
-
 export const TemplateSelection: React.FC<TemplateSelectionProps> = ({
-  templates = defaultTemplates,
   onTemplateSelect
 }) => {
-  const [selectedTemplate, setSelectedTemplate] = useState<string>('');
+  const [selectedTemplate, setSelectedTemplate] = useState<string>("");
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const templateId = e.target.value;
     setSelectedTemplate(templateId);
-    
+
     const template = templates.find(t => t.id === templateId) || null;
     onTemplateSelect?.(template);
   };
@@ -59,7 +40,9 @@ export const TemplateSelection: React.FC<TemplateSelectionProps> = ({
               backgroundPosition: 'right 12px center'
             }}
           >
-            <option value="" className='font-bold'>Обери шаблон відповіді</option>
+            <option value="" className="font-bold">
+              Обери шаблон відповіді
+            </option>
             {templates.map(template => (
               <option key={template.id} value={template.id}>
                 {template.name}
