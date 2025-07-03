@@ -12,7 +12,14 @@ export interface Template {
 interface RequestProcessingState {
   uploadedFile: File | null;
   analysisData: AnalysisResult | undefined;
-  verificationData: string;
+  verificationData: {
+    dateOfBirth: string;
+    name: string;
+    residenceAddress: string;
+    passport: string;
+    criminalRecords: string;
+    additionalInfo: string;
+  };
   selectedTemplate: Template | null;
   generatedResponse: string;
   isAnalyzing: boolean;
@@ -20,16 +27,25 @@ interface RequestProcessingState {
   error: string | null;
 }
 
+
 const initialState: RequestProcessingState = {
   uploadedFile: null,
   analysisData: undefined,
-  verificationData: "",
+  verificationData: {
+    dateOfBirth: '',
+    name: '',
+    residenceAddress: '',
+    passport: '',
+    criminalRecords: '',
+    additionalInfo: '',
+  },
   selectedTemplate: null,
-  generatedResponse: "",
+  generatedResponse: '',
   isAnalyzing: false,
   isGeneratingResponse: false,
   error: null,
 };
+
 
 
 
@@ -72,7 +88,18 @@ export const analyzeFile = createAsyncThunk<
 // 🟢 Генерація відповіді
 export const generateResponse = createAsyncThunk<
   string,
-  { template: Template; verificationData: string; fileName?: string },
+  {
+    template: Template;
+    verificationData: {
+      dateOfBirth: string;
+      name: string;
+      residenceAddress: string;
+      passport: string;
+      criminalRecords: string;
+      additionalInfo: string;
+    }
+    fileName?: string
+  },
   { rejectValue: string }
 >(
   "requestProcessing/generateResponse",
@@ -91,22 +118,26 @@ export const generateResponse = createAsyncThunk<
 const requestProcessingSlice = createSlice({
   name: "requestProcessing",
   initialState,
-  reducers: {
-    setUploadedFile: (state, action: PayloadAction<File>) => {
-      state.uploadedFile = action.payload;
-      state.error = null;
-    },
-    setVerificationData: (state, action: PayloadAction<string>) => {
-      state.verificationData = action.payload;
-    },
-    setSelectedTemplate: (state, action: PayloadAction<Template | null>) => {
-      state.selectedTemplate = action.payload;
-    },
-    clearError: (state) => {
-      state.error = null;
-    },
-    resetState: () => initialState,
+reducers: {
+  setUploadedFile: (state, action: PayloadAction<File>) => {
+    state.uploadedFile = action.payload;
+    state.error = null;
   },
+  setVerificationField: (
+    state,
+    action: PayloadAction<{ field: keyof RequestProcessingState['verificationData']; value: string }>
+  ) => {
+    state.verificationData[action.payload.field] = action.payload.value;
+  },
+  setSelectedTemplate: (state, action: PayloadAction<Template | null>) => {
+    state.selectedTemplate = action.payload;
+  },
+  clearError: (state) => {
+    state.error = null;
+  },
+  resetState: () => initialState,
+},
+
   extraReducers: (builder) => {
     builder
       .addCase(analyzeFile.pending, (state) => {
@@ -138,10 +169,11 @@ const requestProcessingSlice = createSlice({
 
 export const {
   setUploadedFile,
-  setVerificationData,
+  setVerificationField,
   setSelectedTemplate,
   clearError,
   resetState,
 } = requestProcessingSlice.actions;
+
 
 export default requestProcessingSlice.reducer;

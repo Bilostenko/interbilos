@@ -21,7 +21,7 @@ export const AIAnalysis: React.FC<AIAnalysisProps> = ({
   return (
     <div className="px-4 py-3">
       <h3 className="text-[#101418] text-lg font-bold leading-tight tracking-[-0.015em] pb-2 pt-4">
-        2. Короткий зміст
+        2. Відображення короткого змісту твого запиту
       </h3>
       <div className="min-h-[100px] p-4 rounded-xl border border-[#d4dbe2] bg-gray-50">
         {isLoading ? (

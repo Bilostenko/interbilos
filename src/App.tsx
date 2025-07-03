@@ -9,9 +9,10 @@ import { TemplateSelection } from './components/TemplateSelection';
 import { ResponseDisplay } from './components/ResponseDisplay';
 import { useAppDispatch, useAppSelector } from './store/hooks';
 import type { Template } from './store/requestProcessingSlice';
+import { generateDocx } from "../src/utils/docxGenerator";
+
 import {
   setUploadedFile,
-  setVerificationData,
   setSelectedTemplate,
   analyzeFile,
   generateResponse,
@@ -24,7 +25,6 @@ const MainContent: React.FC = () => {
     analysisData,
     verificationData,
     selectedTemplate,
-    generatedResponse,
     isAnalyzing,
     isGeneratingResponse,
     error,
@@ -35,38 +35,57 @@ const MainContent: React.FC = () => {
     dispatch(analyzeFile(file));
   };
 
-  const handleVerificationDataChange = (data: string) => {
-    dispatch(setVerificationData(data));
-  };
-
   const handleTemplateSelect = (template: Template | null) => {
     dispatch(setSelectedTemplate(template));
   };
 
   // Auto-generate response when template is selected and verification data exists
-  useEffect(() => {
-    if (selectedTemplate && verificationData.trim()) {
-      dispatch(generateResponse({
-        template: selectedTemplate,
-        verificationData,
-        fileName: uploadedFile?.name,
-      }));
-    }
-  }, [selectedTemplate, verificationData, uploadedFile?.name, dispatch]);
+ useEffect(() => {
+  if (
+    selectedTemplate &&
+    Object.values(verificationData).some((v) => v.trim() !== "")
+  ) {
+    dispatch(generateResponse({
+      template: selectedTemplate,
+      verificationData,
+      fileName: uploadedFile?.name,
+    }));
+  }
+}, [selectedTemplate, verificationData, uploadedFile?.name, dispatch]);
 
-  const handleDownloadResponse = () => {
-    if (generatedResponse) {
-      const blob = new Blob([generatedResponse], { type: 'text/plain' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `police_response_${new Date().toISOString().split('T')[0]}.txt`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    }
+
+const handleDownloadResponse = async () => {
+  if (!selectedTemplate) {
+    alert("Please select a template before downloading.");
+    return;
+  }
+
+  if (!analysisData) {
+    alert("Analysis data is missing.");
+    return;
+  }
+
+  // Формуємо об'єкт даних
+  const docxData = {
+    sender: (analysisData.sender || "").toUpperCase(),
+    reference: analysisData.reference || "",
+    date: analysisData.date || "",
+    name: (verificationData.name || "").toUpperCase(),
+    "date of birth": verificationData.dateOfBirth || "",
+    "residence address": verificationData.residenceAddress || "",
+    passpsort: verificationData.passport || "",
+    criminal_records: verificationData.criminalRecords || "",
+    "additional info": verificationData.additionalInfo || "",
   };
+
+  await generateDocx({
+    templateUrl: `/templates/${selectedTemplate.content}`,
+    data: docxData,
+    outputFileName: `Response_${new Date().toISOString().split("T")[0]}.docx`,
+  });
+};
+
+
 
   return (
     <div className="relative flex size-full min-h-screen flex-col bg-gray-50">
@@ -99,10 +118,7 @@ const MainContent: React.FC = () => {
               isLoading={isAnalyzing}
             />
             
-            <VerificationInput 
-              onDataSubmit={handleVerificationDataChange}
-              initialValue={verificationData}
-            />
+            <VerificationInput />
             
             <TemplateSelection 
               onTemplateSelect={handleTemplateSelect}

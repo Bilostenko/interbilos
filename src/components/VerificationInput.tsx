@@ -1,50 +1,70 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { setVerificationField } from '../store/requestProcessingSlice';
 
-interface VerificationInputProps {
-  onDataSubmit?: (data: string) => void;
-  initialValue?: string;
-}
+export const VerificationInput: React.FC = () => {
+  const dispatch = useAppDispatch();
+  const verificationData = useAppSelector(
+    (state) => state.requestProcessing.verificationData
+  );
 
-export const VerificationInput: React.FC<VerificationInputProps> = ({
-  onDataSubmit,
-  initialValue = ''
-}) => {
-  const [verificationData, setVerificationData] = useState(initialValue);
-
-  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setVerificationData(e.target.value);
-  };
-
-  const handleSubmit = () => {
-    if (onDataSubmit) {
-      onDataSubmit(verificationData);
-    }
+  const handleChange = (field: keyof typeof verificationData) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    dispatch(setVerificationField({ field, value: e.target.value }));
   };
 
   return (
-  <div className="px-4 py-3">
-    <h3 className="text-[#101418] text-lg font-bold leading-tight tracking-[-0.015em] pb-2 pt-4">
-      3. Введення даних для верифікації
-    </h3>
-    <div className="flex w-full flex-wrap items-end gap-4">
-      <label className="flex flex-col w-full flex-1">
-        <textarea
-          value={verificationData}
-          onChange={handleChange}
-          placeholder="Enter verified data here"
-          className="form-input w-full resize-y rounded-xl text-[#101418] focus:outline-0 focus:ring-0 border border-[#d4dbe2] bg-gray-50 focus:border-[#d4dbe2] min-h-36 max-h-[400px] overflow-y-auto placeholder:text-[#5c728a] p-[15px] text-base font-normal leading-normal"
-        />
-      </label>
-      <button
-        onClick={handleSubmit}
-        className="flex h-10 items-center justify-center rounded-xl bg-[#dce7f3] px-4 text-sm font-bold text-[#101418] hover:bg-[#c8daf0] transition-colors"
-      >
-        ДАЛІ
-      </button>
-    </div>
-  </div>
-);
+    <div className="px-4 py-3 space-y-4">
+      <h3 className="text-[#101418] text-lg font-bold leading-tight tracking-[-0.015em] pb-2">
+        3. Введення даних для верифікації
+      </h3>
+      
+      <input
+        type="text"
+        value={verificationData.name}
+        onChange={handleChange('name')}
+        placeholder="Full Name (e.g., JOHN DOE)"
+        className="form-input w-full rounded-xl border border-[#d4dbe2] bg-gray-50 p-[12px]"
+      />
 
+      <input
+        type="text"
+        value={verificationData.dateOfBirth}
+        onChange={handleChange('dateOfBirth')}
+        placeholder="Date of Birth (e.g., 01.01.1980)"
+        className="form-input w-full rounded-xl border border-[#d4dbe2] bg-gray-50 p-[12px]"
+      />
+
+      <input
+        type="text"
+        value={verificationData.residenceAddress}
+        onChange={handleChange('residenceAddress')}
+        placeholder="Residence Address"
+        className="form-input w-full rounded-xl border border-[#d4dbe2] bg-gray-50 p-[12px]"
+      />
+
+      <input
+        type="text"
+        value={verificationData.passport}
+        onChange={handleChange('passport')}
+        placeholder="Passport Info"
+        className="form-input w-full rounded-xl border border-[#d4dbe2] bg-gray-50 p-[12px]"
+      />
+
+      <textarea
+        value={verificationData.criminalRecords}
+        onChange={handleChange('criminalRecords')}
+        placeholder="Criminal Records"
+        className="form-input w-full resize-y rounded-xl border border-[#d4dbe2] bg-gray-50 p-[12px] min-h-28"
+      />
+
+      <textarea
+        value={verificationData.additionalInfo}
+        onChange={handleChange('additionalInfo')}
+        placeholder="Additional Info"
+        className="form-input w-full resize-y rounded-xl border border-[#d4dbe2] bg-gray-50 p-[12px] min-h-28"
+      />
+    </div>
+  );
 };
 
 export default VerificationInput;
