@@ -65,15 +65,19 @@ const handleDownloadResponse = async () => {
     return;
   }
 
-  // Формуємо об'єкт даних
+ const referenceText = 
+    (analysisData.date || "") === "Немає"
+      ? `YOUR REF: ${analysisData.reference}`
+      : `YOUR REF: ${analysisData.reference} dated ${analysisData.date}`;
+
+  // Формуємо об'єкт даних для підстановки
   const docxData = {
     sender: (analysisData.sender || "").toUpperCase(),
-    reference: analysisData.reference || "",
-    date: analysisData.date || "",
-    name: (verificationData.name || "").toUpperCase(),
+    reference_block: referenceText,
+    name: verificationData.name || "",
     "date of birth": verificationData.dateOfBirth || "",
     "residence address": verificationData.residenceAddress || "",
-    passpsort: verificationData.passport || "",
+    passport: verificationData.passport || "",
     criminal_records: verificationData.criminalRecords || "",
     "additional info": verificationData.additionalInfo || "",
   };
