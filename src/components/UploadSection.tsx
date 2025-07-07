@@ -16,7 +16,7 @@ export const UploadSection: React.FC<UploadSectionProps> = ({ onFileUpload }) =>
       if (isValidFile(file)) {
         onFileUpload?.(file);
         dispatch(setUploadedFile(file));
-        dispatch(analyzeFile(file)); // Запускає парсинг + GPT
+        dispatch(analyzeFile(file)); 
       }
     }
   };
