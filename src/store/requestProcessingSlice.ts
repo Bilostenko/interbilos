@@ -87,7 +87,7 @@ export const analyzeFile = createAsyncThunk<
 
 // 🟢 Генерація відповіді
 export const generateResponse = createAsyncThunk<
-  string, // Тип — рядок
+  string,
   {
     template: Template;
     verificationData: {
@@ -98,24 +98,43 @@ export const generateResponse = createAsyncThunk<
       criminalRecords: string;
       additionalInfo: string;
     };
-    fileName?: string;
+     fileName?: string;
   },
   { rejectValue: string }
 >(
   "requestProcessing/generateResponse",
   async (params, { rejectWithValue }) => {
     try {
-      const { template, verificationData, fileName } = params;
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      
-      // Готуємо об’єкт, який хочеш віддати як JSON
-      const payload = {
-        templateContent: template.content,
-        verificationData,
-        fileName: fileName || "No file uploaded"
-      };
+      const { template, verificationData } = params;
 
-      return JSON.stringify(payload, null, 2);
+      // 👇 ТУТ робимо POST-запит
+      const response = await fetch("/api/generateResponse", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          summary: template.content,
+          verificationData: {
+            name: verificationData.name,
+            date_of_birth: verificationData.dateOfBirth,
+            residence_address: verificationData.residenceAddress,
+            passport: verificationData.passport,
+            criminal_records: verificationData.criminalRecords,
+            additional_info: verificationData.additionalInfo
+          }
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error("API error");
+      }
+
+      const data = await response.json();
+
+      // логувати для дебагу
+      console.log("Generated response JSON:", data);
+
+      // Повертаємо як string
+      return JSON.stringify(data.response, null, 2);
 
     } catch (error) {
       console.error("Generate response error:", error);
@@ -123,6 +142,7 @@ export const generateResponse = createAsyncThunk<
     }
   }
 );
+
 
 
 const requestProcessingSlice = createSlice({

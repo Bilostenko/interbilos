@@ -1,4 +1,15 @@
-content: `
+import OpenAI from "openai";
+const openai = new OpenAI();
+
+export default async function handler(req, res) {
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
+  }
+
+  const { summary, verificationData } = req.body;
+
+  try {
+    const prompt = `
 Ти помічник, який на основі короткого переказу запиту (summary) і додаткових даних (manualData) створює фінальний JSON для Word-документа відповіді.
 
 Ти маєш повернути ВИКЛЮЧНО валідний JSON без коментарів.
@@ -72,7 +83,23 @@ JSON має містити ключі:
 Дані для обробки:
 
 {
-  "summary": ${JSON.stringify(templateContent)},
-  "manualData": ${JSON.stringify(verificationData)}
+  "summary": ${JSON.stringify(summary, null, 2)},
+  "manualData": ${JSON.stringify(verificationData, null, 2)}
 }
-`
+    `.trim();
+
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [
+        { role: "user", content: prompt }
+      ],
+      temperature: 0.2,
+    });
+
+    const jsonResponse = completion.choices[0].message.content;
+    res.status(200).json({ response: JSON.parse(jsonResponse) });
+  } catch (error) {
+    console.error("OpenAI error:", error);
+    res.status(500).json({ error: "Failed to generate response" });
+  }
+}
