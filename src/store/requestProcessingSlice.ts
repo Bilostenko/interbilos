@@ -87,7 +87,7 @@ export const analyzeFile = createAsyncThunk<
 
 // 🟢 Генерація відповіді
 export const generateResponse = createAsyncThunk<
-  string,
+  string, // Тип — рядок
   {
     template: Template;
     verificationData: {
@@ -97,8 +97,8 @@ export const generateResponse = createAsyncThunk<
       passport: string;
       criminalRecords: string;
       additionalInfo: string;
-    }
-    fileName?: string
+    };
+    fileName?: string;
   },
   { rejectValue: string }
 >(
@@ -107,7 +107,16 @@ export const generateResponse = createAsyncThunk<
     try {
       const { template, verificationData, fileName } = params;
       await new Promise((resolve) => setTimeout(resolve, 1500));
-      return `Response generated using ${template.name}:\n\n${template.content}\n\nVerification Data:\n${verificationData}\n\nDocument: ${fileName || "No file uploaded"}`;
+      
+      // Готуємо об’єкт, який хочеш віддати як JSON
+      const payload = {
+        templateContent: template.content,
+        verificationData,
+        fileName: fileName || "No file uploaded"
+      };
+
+      return JSON.stringify(payload, null, 2);
+
     } catch (error) {
       console.error("Generate response error:", error);
       return rejectWithValue("Failed to generate response");
@@ -115,28 +124,29 @@ export const generateResponse = createAsyncThunk<
   }
 );
 
+
 const requestProcessingSlice = createSlice({
   name: "requestProcessing",
   initialState,
-reducers: {
-  setUploadedFile: (state, action: PayloadAction<File>) => {
-    state.uploadedFile = action.payload;
-    state.error = null;
+  reducers: {
+    setUploadedFile: (state, action: PayloadAction<File>) => {
+      state.uploadedFile = action.payload;
+      state.error = null;
+    },
+    setVerificationField: (
+      state,
+      action: PayloadAction<{ field: keyof RequestProcessingState['verificationData']; value: string }>
+    ) => {
+      state.verificationData[action.payload.field] = action.payload.value;
+    },
+    setSelectedTemplate: (state, action: PayloadAction<Template | null>) => {
+      state.selectedTemplate = action.payload;
+    },
+    clearError: (state) => {
+      state.error = null;
+    },
+    resetState: () => initialState,
   },
-  setVerificationField: (
-    state,
-    action: PayloadAction<{ field: keyof RequestProcessingState['verificationData']; value: string }>
-  ) => {
-    state.verificationData[action.payload.field] = action.payload.value;
-  },
-  setSelectedTemplate: (state, action: PayloadAction<Template | null>) => {
-    state.selectedTemplate = action.payload;
-  },
-  clearError: (state) => {
-    state.error = null;
-  },
-  resetState: () => initialState,
-},
 
   extraReducers: (builder) => {
     builder
