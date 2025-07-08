@@ -76,10 +76,10 @@ const handleDownloadResponse = async () => {
     reference_block: referenceText,
     name: verificationData.name || "",
     "date_of_birth": verificationData.date_of_birth || "",
-    "residence address": verificationData.residenceAddress || "",
+    "residence_address": verificationData.residenceAddress || "",
     passport: verificationData.passport || "",
     criminal_records: verificationData.criminalRecords || "",
-    "additional info": verificationData.additionalInfo || "",
+    "additional_info": verificationData.additionalInfo || "",
   };
 
   await generateDocx({
