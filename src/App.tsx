@@ -75,7 +75,7 @@ const handleDownloadResponse = async () => {
     sender: (analysisData.sender || "").toUpperCase(),
     reference_block: referenceText,
     name: verificationData.name || "",
-    "date of birth": verificationData.date_of_birth || "",
+    "date_of_birth": verificationData.date_of_birth || "",
     "residence address": verificationData.residenceAddress || "",
     passport: verificationData.passport || "",
     criminal_records: verificationData.criminalRecords || "",
