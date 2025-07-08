@@ -28,8 +28,8 @@ export const VerificationInput: React.FC = () => {
 
       <input
         type="text"
-        value={verificationData.dateOfBirth}
-        onChange={handleChange('dateOfBirth')}
+        value={verificationData.date_of_birth}
+        onChange={handleChange('date_of_birth')}
         placeholder="Date of Birth (e.g., 01.01.1980)"
         className="form-input w-full rounded-xl border border-[#d4dbe2] bg-gray-50 p-[12px]"
       />

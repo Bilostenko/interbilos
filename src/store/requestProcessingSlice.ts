@@ -13,7 +13,7 @@ interface RequestProcessingState {
   uploadedFile: File | null;
   analysisData: AnalysisResult | undefined;
   verificationData: {
-    dateOfBirth: string;
+    date_of_birth: string;
     name: string;
     residenceAddress: string;
     passport: string;
@@ -32,7 +32,7 @@ const initialState: RequestProcessingState = {
   uploadedFile: null,
   analysisData: undefined,
   verificationData: {
-    dateOfBirth: '',
+    date_of_birth: '',
     name: '',
     residenceAddress: '',
     passport: '',
@@ -91,7 +91,7 @@ export const generateResponse = createAsyncThunk<
   {
     template: Template;
     verificationData: {
-      dateOfBirth: string;
+      date_of_birth: string;
       name: string;
       residenceAddress: string;
       passport: string;
@@ -115,7 +115,7 @@ export const generateResponse = createAsyncThunk<
           summary: template.content,
           verificationData: {
             name: verificationData.name,
-            date_of_birth: verificationData.dateOfBirth,
+            date_of_birth: verificationData.date_of_birth,
             residence_address: verificationData.residenceAddress,
             passport: verificationData.passport,
             criminal_records: verificationData.criminalRecords,
