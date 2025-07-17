@@ -8,18 +8,17 @@ export const VerificationInput: React.FC = () => {
     (state) => state.requestProcessing.verificationData
   );
 
- const handleChange =
-  (field: keyof typeof verificationData) =>
-  (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const target = e.target;
-    const value =
-      target instanceof HTMLInputElement && target.type === 'checkbox'
-        ? target.checked
-        : target.value;
+  const handleChange =
+    (field: keyof typeof verificationData) =>
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      const target = e.target;
+      const value =
+        target instanceof HTMLInputElement && target.type === "checkbox"
+          ? target.checked
+          : target.value;
 
-    dispatch(setVerificationField({ field, value }));
-  };
-
+      dispatch(setVerificationField({ field, value }));
+    };
 
   return (
     <div className="px-4 py-3 space-y-4">
@@ -143,8 +142,8 @@ export const VerificationInput: React.FC = () => {
         <label className="flex items-center space-x-2">
           <input
             type="checkbox"
-            // checked={isChecked}
-            // onChange={(e) => setIsChecked(e.target.checked)}
+            checked={verificationData.border}
+            onChange={handleChange("border")}
             className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring focus:ring-blue-200"
           />
           <span className="text-base text-gray-800">BORDER RECORDS</span>
