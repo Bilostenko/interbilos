@@ -40,11 +40,17 @@ const MainContent: React.FC = () => {
   };
 
   // Auto-generate response when template is selected and verification data exists
- useEffect(() => {
-  if (
+useEffect(() => {
+  const hasDataToGenerate =
     selectedTemplate &&
-    Object.values(verificationData).some((v) => v.trim() !== "")
-  ) {
+    (
+      Object.values(verificationData).some(
+        (v) => typeof v === "string" && v.trim() !== ""
+      ) ||
+      verificationData.photo !== false || verificationData.border !== false
+    );
+
+  if (hasDataToGenerate) {
     dispatch(generateResponse({
       template: selectedTemplate,
       verificationData,
@@ -52,7 +58,6 @@ const MainContent: React.FC = () => {
     }));
   }
 }, [selectedTemplate, verificationData, uploadedFile?.name, dispatch]);
-
 
 const handleDownloadResponse = async () => {
   if (!selectedTemplate) {

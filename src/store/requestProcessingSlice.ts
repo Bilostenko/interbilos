@@ -19,6 +19,8 @@ interface RequestProcessingState {
     passport: string;
     criminalRecords: string;
     additionalInfo: string;
+    photo: boolean;
+    border: boolean;
   };
   selectedTemplate: Template | null;
   generatedResponse: string;
@@ -38,6 +40,8 @@ const initialState: RequestProcessingState = {
     passport: '',
     criminalRecords: '',
     additionalInfo: '',
+    photo: false,
+    border: false
   },
   selectedTemplate: null,
   generatedResponse: '',
@@ -98,8 +102,10 @@ export const generateResponse = createAsyncThunk<
       passport: string;
       criminalRecords: string;
       additionalInfo: string;
+      photo: boolean,
+      border: boolean
     };
-     fileName?: string;
+    fileName?: string;
   },
   { rejectValue: string }
 >(
@@ -156,9 +162,12 @@ const requestProcessingSlice = createSlice({
     },
     setVerificationField: (
       state,
-      action: PayloadAction<{ field: keyof RequestProcessingState['verificationData']; value: string }>
+      action: PayloadAction<{
+        field: keyof RequestProcessingState['verificationData'];
+        value: string | boolean;
+      }>
     ) => {
-      state.verificationData[action.payload.field] = action.payload.value;
+      (state.verificationData[action.payload.field] as typeof action.payload.value) = action.payload.value;
     },
     setSelectedTemplate: (state, action: PayloadAction<Template | null>) => {
       state.selectedTemplate = action.payload;
