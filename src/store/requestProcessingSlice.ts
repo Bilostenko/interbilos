@@ -126,7 +126,9 @@ export const generateResponse = createAsyncThunk<
             residence_address: verificationData.residenceAddress,
             passport: verificationData.passport,
             criminal_records: verificationData.criminalRecords,
-            additional_info: verificationData.additionalInfo
+            additional_info: verificationData.additionalInfo,
+            photo: verificationData.photo,
+            border: verificationData.border
           }
         })
       });
