@@ -23,8 +23,21 @@ export async function generateDocx({
     linebreaks: true,
   });
 
+  // 🔧 Створюємо змінні для умовних блоків у шаблоні
+  function toBoolean(value: unknown): boolean {
+  if (typeof value === 'boolean') return value;
+  if (typeof value === 'string') return value.toLowerCase() === 'true';
+  return Boolean(value);
+}
+
+  const processedData = {
+    ...data,
+    show_photo: !toBoolean(data.delete_photo),
+    show_border: !toBoolean(data.delete_border),
+  };
+
   // Підставляємо дані
-  doc.setData(data);
+  doc.setData(processedData);
 
   try {
     doc.render();
@@ -41,3 +54,4 @@ export async function generateDocx({
 
   saveAs(out, outputFileName);
 }
+
