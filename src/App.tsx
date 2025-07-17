@@ -47,13 +47,18 @@ useEffect(() => {
       Object.values(verificationData).some(
         (v) => typeof v === "string" && v.trim() !== ""
       ) ||
-      verificationData.photo !== false || verificationData.border !== false
+      verificationData.photo !== false ||
+      verificationData.border !== false
     );
 
   if (hasDataToGenerate) {
     dispatch(generateResponse({
       template: selectedTemplate,
-      verificationData,
+      verificationData: {
+        ...verificationData,
+        photo: Boolean(verificationData.photo),
+        border: Boolean(verificationData.border),
+      },
       fileName: uploadedFile?.name,
     }));
   }

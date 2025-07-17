@@ -141,6 +141,7 @@ export const generateResponse = createAsyncThunk<
       console.log("Generated response JSON:", data);
 
       // Повертаємо як string
+      console.log(JSON.stringify(verificationData, null, 2))
       return JSON.stringify(data.response, null, 2);
 
     } catch (error) {
