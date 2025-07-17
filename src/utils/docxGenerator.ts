@@ -24,7 +24,7 @@ export async function generateDocx({
   });
 
   // 🔧 Створюємо змінні для умовних блоків у шаблоні
-  function toBoolean(value: unknown): boolean {
+  function toBoolean(value: boolean | string): boolean {
   if (typeof value === 'boolean') return value;
   if (typeof value === 'string') return value.toLowerCase() === 'true';
   return Boolean(value);
