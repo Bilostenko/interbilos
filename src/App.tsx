@@ -94,7 +94,7 @@ const MainContent: React.FC = () => {
       additional_info: verificationData.additionalInfo || "",
       photo: verificationData.photo, 
       border: verificationData.border,
-      attachment_count, 
+      attachment_count: attachment_count.toString(), 
     };
 
     await generateDocx({
