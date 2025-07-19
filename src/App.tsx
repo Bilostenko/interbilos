@@ -1,14 +1,14 @@
-import React, { useEffect } from 'react';
-import { Provider } from 'react-redux';
-import { store } from './store/store';
-import { Header } from './components/Header';
-import { UploadSection } from './components/UploadSection';
-import { AIAnalysis } from './components/AIAnalysis';
-import { VerificationInput } from './components/VerificationInput';
-import { TemplateSelection } from './components/TemplateSelection';
-import { ResponseDisplay } from './components/ResponseDisplay';
-import { useAppDispatch, useAppSelector } from './store/hooks';
-import type { Template } from './store/requestProcessingSlice';
+import React, { useEffect } from "react";
+import { Provider } from "react-redux";
+import { store } from "./store/store";
+import { Header } from "./components/Header";
+import { UploadSection } from "./components/UploadSection";
+import { AIAnalysis } from "./components/AIAnalysis";
+import { VerificationInput } from "./components/VerificationInput";
+import { TemplateSelection } from "./components/TemplateSelection";
+import { ResponseDisplay } from "./components/ResponseDisplay";
+import { useAppDispatch, useAppSelector } from "./store/hooks";
+import type { Template } from "./store/requestProcessingSlice";
 import { generateDocx } from "../src/utils/docxGenerator";
 
 import {
@@ -16,7 +16,7 @@ import {
   setSelectedTemplate,
   analyzeFile,
   generateResponse,
-} from './store/requestProcessingSlice';
+} from "./store/requestProcessingSlice";
 
 const MainContent: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -40,72 +40,72 @@ const MainContent: React.FC = () => {
   };
 
   // Auto-generate response when template is selected and verification data exists
-useEffect(() => {
-  const hasDataToGenerate =
-    selectedTemplate &&
-    (
-      Object.values(verificationData).some(
+  useEffect(() => {
+    const hasDataToGenerate =
+      selectedTemplate &&
+      (Object.values(verificationData).some(
         (v) => typeof v === "string" && v.trim() !== ""
       ) ||
-      verificationData.photo !== false ||
-      verificationData.border !== false
-    );
+        verificationData.photo !== false ||
+        verificationData.border !== false);
 
-  if (hasDataToGenerate) {
-    dispatch(generateResponse({
-      template: selectedTemplate,
-      verificationData: {
-        ...verificationData,
-        photo: Boolean(verificationData.photo),
-        border: Boolean(verificationData.border),
-      },
-      fileName: uploadedFile?.name,
-    }));
-  }
-}, [selectedTemplate, verificationData, uploadedFile?.name, dispatch]);
+    if (hasDataToGenerate) {
+      dispatch(
+        generateResponse({
+          template: selectedTemplate,
+          verificationData: {
+            ...verificationData,
+            photo: Boolean(verificationData.photo),
+            border: Boolean(verificationData.border),
+          },
+          fileName: uploadedFile?.name,
+        })
+      );
+    }
+  }, [selectedTemplate, verificationData, uploadedFile?.name, dispatch]);
 
-const handleDownloadResponse = async () => {
-  if (!selectedTemplate) {
-    alert("Please select a template before downloading.");
-    return;
-  }
+  const handleDownloadResponse = async () => {
+    if (!selectedTemplate) {
+      alert("Please select a template before downloading.");
+      return;
+    }
 
-  if (!analysisData) {
-    alert("Analysis data is missing.");
-    return;
-  }
+    if (!analysisData) {
+      alert("Analysis data is missing.");
+      return;
+    }
 
- const referenceText = 
-    (analysisData.date || "") === "Немає"
-      ? `YOUR REF: ${analysisData.reference}`
-      : `YOUR REF: ${analysisData.reference} dated ${analysisData.date}`;
+    const referenceText =
+      (analysisData.date || "") === "Немає"
+        ? `YOUR REF: ${analysisData.reference}`
+        : `YOUR REF: ${analysisData.reference} dated ${analysisData.date}`;
 
-  // Формуємо об'єкт даних для підстановки
-  const docxData = {
-    sender: (analysisData.sender || "").toUpperCase(),
-    reference_block: referenceText,
-    name: verificationData.name || "",
-    "date_of_birth": verificationData.date_of_birth || "",
-    "residence_address": verificationData.residenceAddress || "",
-    passport: verificationData.passport || "",
-    criminal_records: verificationData.criminalRecords || "",
-    "additional_info": verificationData.additionalInfo || "",
+    // Формуємо об'єкт даних для підстановки
+    const docxData = {
+      sender: (analysisData.sender || "").toUpperCase(),
+      reference_block: referenceText,
+      name: verificationData.name || "",
+      date_of_birth: verificationData.date_of_birth || "",
+      residence_address: verificationData.residenceAddress || "",
+      passport: verificationData.passport || "",
+      criminal_records: verificationData.criminalRecords || "",
+      additional_info: verificationData.additionalInfo || "",
+      photo: verificationData.photo, 
+      border: verificationData.border, 
+    };
+
+    await generateDocx({
+      templateUrl: `/templates/${selectedTemplate.content}`,
+      data: docxData,
+      outputFileName: `Response_${new Date().toISOString().split("T")[0]}.docx`,
+    });
   };
-
-  await generateDocx({
-    templateUrl: `/templates/${selectedTemplate.content}`,
-    data: docxData,
-    outputFileName: `Response_${new Date().toISOString().split("T")[0]}.docx`,
-  });
-};
-
-
 
   return (
     <div className="relative flex size-full min-h-screen flex-col bg-gray-50">
       <div className="layout-container flex h-full grow flex-col">
         <Header />
-        
+
         <div className="px-40 flex flex-1 justify-center py-5">
           <div className="layout-content-container flex flex-col max-w-[960px] flex-1">
             <div className="flex flex-wrap justify-between gap-3 p-4">
@@ -126,19 +126,14 @@ const handleDownloadResponse = async () => {
             )}
 
             <UploadSection onFileUpload={handleFileUpload} />
-            
-            <AIAnalysis 
-              analysisData={analysisData} 
-              isLoading={isAnalyzing}
-            />
-            
+
+            <AIAnalysis analysisData={analysisData} isLoading={isAnalyzing} />
+
             <VerificationInput />
-            
-            <TemplateSelection 
-              onTemplateSelect={handleTemplateSelect}
-            />
-            
-            <ResponseDisplay 
+
+            <TemplateSelection onTemplateSelect={handleTemplateSelect} />
+
+            <ResponseDisplay
               onDownload={handleDownloadResponse}
               isGenerating={isGeneratingResponse}
             />

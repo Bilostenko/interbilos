@@ -4,7 +4,7 @@ import { saveAs } from "file-saver";
 
 export interface GenerateDocxOptions {
   templateUrl: string;
-  data: Record<string, string>;
+  data: Record<string, string | boolean>;
   outputFileName: string;
 }
 
