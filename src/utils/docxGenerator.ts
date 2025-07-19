@@ -25,15 +25,19 @@ export async function generateDocx({
 
   // 🔧 Створюємо змінні для умовних блоків у шаблоні
   function toBoolean(value: boolean | string): boolean {
-  if (typeof value === 'boolean') return value;
-  if (typeof value === 'string') return value.toLowerCase() === 'true';
-  return Boolean(value);
-}
+    if (typeof value === 'boolean') return value;
+    if (typeof value === 'string') return value.toLowerCase() === 'true';
+    return Boolean(value);
+  }
 
+  const count = Number(data.attachment_count);
   const processedData = {
     ...data,
     show_photo: !toBoolean(data.delete_photo),
     show_border: !toBoolean(data.delete_border),
+    attachment_count_1: count === 1,
+    attachment_count_2: count === 2,
+    attachment_count_3: count === 3,
   };
 
   // Підставляємо дані
