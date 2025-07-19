@@ -81,6 +81,8 @@ const MainContent: React.FC = () => {
         : `YOUR REF: ${analysisData.reference} dated ${analysisData.date}`;
 
     // Формуємо об'єкт даних для підстановки
+    const attachment_count = 1 +(verificationData.photo ? 1 : 0) + (verificationData.border ? 1 : 0);
+
     const docxData = {
       sender: (analysisData.sender || "").toUpperCase(),
       reference_block: referenceText,
@@ -91,7 +93,8 @@ const MainContent: React.FC = () => {
       criminal_records: verificationData.criminalRecords || "",
       additional_info: verificationData.additionalInfo || "",
       photo: verificationData.photo, 
-      border: verificationData.border, 
+      border: verificationData.border,
+      attachment_count, 
     };
 
     await generateDocx({
