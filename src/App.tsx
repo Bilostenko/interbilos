@@ -81,7 +81,7 @@ const MainContent: React.FC = () => {
         : `${analysisData.reference} dated ${analysisData.date}`;
 
     // Формуємо об'єкт даних для підстановки
-    const attachment_count = (verificationData.photo ? 1 : 0) + (verificationData.border ? 1 : 0);
+    const attachment_count = (verificationData.photo ? 1 : 0) + (verificationData.border ? 2 : 0);
 
     const docxData = {
       sender: (analysisData.sender || "").toUpperCase(),
