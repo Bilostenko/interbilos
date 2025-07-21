@@ -77,8 +77,12 @@ const MainContent: React.FC = () => {
 
     const referenceText =
       (analysisData.date || "") === "Немає"
-        ? `YOUR REF: ${analysisData.reference}`
-        : `YOUR REF: ${analysisData.reference} dated ${analysisData.date}`;
+        ? analysisData.reference
+        : `${analysisData.reference} dated ${analysisData.date}`;
+    // const referenceText =
+    //   (analysisData.date || "") === "Немає"
+    //     ? `YOUR REF: ${analysisData.reference}`
+    //     : `YOUR REF: ${analysisData.reference} dated ${analysisData.date}`;
 
     // Формуємо об'єкт даних для підстановки
     const attachment_count = 1 +(verificationData.photo ? 1 : 0) + (verificationData.border ? 1 : 0);
