@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { templates } from "../data/templates"; // твій правильний список
+import { templates } from "../data/templates"; // list of available response templates
 
 interface Template {
   id: string;
