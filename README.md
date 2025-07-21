@@ -1,3 +1,5 @@
+Проєкт призначений для автоматичної обробки офіційних запитів: завантажуєш документ, система витягує з нього ключові дані за допомогою OpenAI, дає можливість доповнити/скоригувати інформацію, далі обираєш шаблон відповіді й отримуєш сформований Word‑файл. 
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
