@@ -23,7 +23,7 @@ export const VerificationInput: React.FC = () => {
   return (
     <div className="px-4 py-3 space-y-4">
       <h3 className="text-[#101418] text-lg font-bold leading-tight tracking-[-0.015em] pb-2">
-        3. Введення даних для верифікації
+        4. Введення даних для верифікації
       </h3>
 
       <div className="mb-5">

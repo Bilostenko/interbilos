@@ -10,6 +10,7 @@ import { ResponseDisplay } from "./components/ResponseDisplay";
 import { useAppDispatch, useAppSelector } from "./store/hooks";
 import type { Template } from "./store/requestProcessingSlice";
 import { generateDocx } from "../src/utils/docxGenerator";
+import { resetState } from "./store/requestProcessingSlice";
 
 import {
   setUploadedFile,
@@ -81,7 +82,8 @@ const MainContent: React.FC = () => {
         : `${analysisData.reference} dated ${analysisData.date}`;
 
     // Формуємо об'єкт даних для підстановки
-    const attachment_count = (verificationData.photo ? 1 : 0) + (verificationData.border ? 2 : 0);
+    const attachment_count =
+      (verificationData.photo ? 1 : 0) + (verificationData.border ? 2 : 0);
 
     const docxData = {
       sender: (analysisData.sender || "").toUpperCase(),
@@ -92,9 +94,9 @@ const MainContent: React.FC = () => {
       passport: verificationData.passport || "",
       criminal_records: verificationData.criminalRecords || "",
       additional_info: verificationData.additionalInfo || "",
-      photo: verificationData.photo, 
+      photo: verificationData.photo,
       border: verificationData.border,
-      attachment_count: attachment_count.toString(), 
+      attachment_count: attachment_count.toString(),
     };
 
     await generateDocx({
@@ -102,6 +104,8 @@ const MainContent: React.FC = () => {
       data: docxData,
       outputFileName: `Response_${new Date().toISOString().split("T")[0]}.docx`,
     });
+    // скидаємо всі інпути
+    dispatch(resetState());
   };
 
   return (
@@ -132,9 +136,9 @@ const MainContent: React.FC = () => {
 
             <AIAnalysis analysisData={analysisData} isLoading={isAnalyzing} />
 
-            <VerificationInput />
-
             <TemplateSelection onTemplateSelect={handleTemplateSelect} />
+
+            <VerificationInput />
 
             <ResponseDisplay
               onDownload={handleDownloadResponse}

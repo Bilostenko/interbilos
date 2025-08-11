@@ -27,7 +27,7 @@ export const TemplateSelection: React.FC<TemplateSelectionProps> = ({
   return (
     <div className="px-4 py-3">
       <h3 className="text-[#101418] text-lg font-bold leading-tight tracking-[-0.015em] pb-2 pt-4">
-        4. Вибір шаблону
+        3. Вибір шаблону
       </h3>
       <div className="flex max-w-[480px] flex-wrap items-end gap-4">
         <label className="flex flex-col min-w-40 flex-1">
