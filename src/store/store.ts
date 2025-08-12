@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 import requestProcessingReducer from './requestProcessingSlice';
+import urgencyReducer from './urgencySlice';
 
 export const store = configureStore({
   reducer: {
     requestProcessing: requestProcessingReducer,
+    urgency: urgencyReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

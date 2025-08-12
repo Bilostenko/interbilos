@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
-import { Provider } from "react-redux";
+import { Provider, useSelector } from "react-redux";
 import { store } from "./store/store";
+import type { RootState } from "./store/store";
 import { Header } from "./components/Header";
 import { UploadSection } from "./components/UploadSection";
 import { AIAnalysis } from "./components/AIAnalysis";
@@ -11,6 +12,8 @@ import { useAppDispatch, useAppSelector } from "./store/hooks";
 import type { Template } from "./store/requestProcessingSlice";
 import { generateDocx } from "../src/utils/docxGenerator";
 import { resetState } from "./store/requestProcessingSlice";
+import { UrgencySelect } from "./components/UrgencySelect";
+import {setUrgency} from "./store/urgencySlice";
 
 import {
   setUploadedFile,
@@ -21,6 +24,7 @@ import {
 
 const MainContent: React.FC = () => {
   const dispatch = useAppDispatch();
+  const urgency = useSelector((state: RootState) => state.urgency.urgency);
   const {
     uploadedFile,
     analysisData,
@@ -137,6 +141,8 @@ const MainContent: React.FC = () => {
             <AIAnalysis analysisData={analysisData} isLoading={isAnalyzing} />
 
             <TemplateSelection onTemplateSelect={handleTemplateSelect} />
+
+            <UrgencySelect value={urgency} onChange={(val) => dispatch(setUrgency(val))} />
 
             <VerificationInput />
 
