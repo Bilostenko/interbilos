@@ -18,7 +18,7 @@ export const UrgencySelect: React.FC<UrgencySelectProps> = ({ value, onChange })
               onChange={() => onChange(type as "routine" | "urgent" | "flash")}
             />
             <span>
-              {type === "routine" ? "Рутинна" : type === "urgent" ? "Терміново" : "Швидко"}
+              {type === "routine" ? "ROUTINE" : type === "urgent" ? "URGENT" : "FLASH"}
             </span>
           </label>
         ))}
