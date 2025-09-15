@@ -141,7 +141,7 @@ const MainContent: React.FC = () => {
             <AIAnalysis analysisData={analysisData} isLoading={isAnalyzing} />
 
             <TemplateSelection onTemplateSelect={handleTemplateSelect} />
-
+console.log(selectedTemplate)
             <UrgencySelect
               value={urgency}
               onChange={(val) => dispatch(setUrgency(val))}
