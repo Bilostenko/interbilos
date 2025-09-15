@@ -13,6 +13,7 @@ import { generateDocx } from "../src/utils/docxGenerator";
 import { resetState } from "./store/requestProcessingSlice";
 import { UrgencySelect } from "./components/UrgencySelect";
 import { setUrgency } from "./store/urgencySlice";
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
 import {
   setUploadedFile,
@@ -40,7 +41,7 @@ const MainContent: React.FC = () => {
   };
 
   const handleTemplateSelect = (template: Template | null) => {
-      console.log("Template selected:", template);
+    console.log("Template selected:", template);
     dispatch(setSelectedTemplate(template));
   };
 
@@ -123,7 +124,7 @@ const MainContent: React.FC = () => {
             <div className="flex flex-wrap justify-between gap-3 p-4">
               <div className="flex min-w-72 flex-col gap-3">
                 <p className="text-[#101418] tracking-light text-[32px] font-bold leading-tight">
-                  Автоматична оборобка запитів
+                  Автоматична обробка запитів
                 </p>
                 <p className="text-[#5c728a] text-sm font-normal leading-normal">
                   Завантажуйте запит, а решту ми зробимо самі.
@@ -143,17 +144,46 @@ const MainContent: React.FC = () => {
 
             <TemplateSelection onTemplateSelect={handleTemplateSelect} />
 
-            <UrgencySelect
-              value={urgency}
-              onChange={(val) => dispatch(setUrgency(val))}
-            />
+            {!selectedTemplate && (
+              <div className="flex justify-center items-center py-10">
+                <DotLottieReact src="/animations/tenor.lotti" loop autoplay />
+                {/* <img
+                  src="/funny-monkey.gif"
+                  alt="Мавпа їсть банан"
+                  className="w-40 h-40 object-contain"
+                /> */}
+              </div>
+            )}
 
-            <VerificationInput />
+            {selectedTemplate && (
+              <>
+                {selectedTemplate.id === "identification" && (
+                  <>
+                    <UrgencySelect
+                      value={urgency}
+                      onChange={(val) => dispatch(setUrgency(val))}
+                    />
+                    <VerificationInput />
+                    <ResponseDisplay
+                      onDownload={handleDownloadResponse}
+                      isGenerating={isGeneratingResponse}
+                    />
+                  </>
+                )}
 
-            <ResponseDisplay
-              onDownload={handleDownloadResponse}
-              isGenerating={isGeneratingResponse}
-            />
+                {selectedTemplate.id === "rejection" && (
+                  <div className="text-3xl font-bold text-red-500 text-center py-10">
+                    ДУПА
+                  </div>
+                )}
+
+                {selectedTemplate.id === "regional" && (
+                  <div className="text-3xl font-bold text-blue-500 text-center py-10">
+                    ДУПА
+                  </div>
+                )}
+              </>
+            )}
           </div>
         </div>
       </div>

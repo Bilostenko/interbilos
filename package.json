@@ -10,10 +10,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@lottiefiles/dotlottie-react": "^0.16.2",
     "@reduxjs/toolkit": "^2.8.2",
     "@tailwindcss/vite": "^4.1.10",
     "docxtemplater": "^3.65.1",
     "file-saver": "^2.0.5",
+    "lottie-react": "^2.4.1",
     "mammoth": "^1.9.1",
     "openai": "^5.8.2",
     "pdfjs-dist": "^3.9.179",
