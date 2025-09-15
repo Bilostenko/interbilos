@@ -177,6 +177,11 @@ const MainContent: React.FC = () => {
                     ДУПА
                   </div>
                 )}
+                  {selectedTemplate.id === "free" && (
+                  <div className="text-3xl font-bold text-green-500 text-center py-10">
+                    ДУПА
+                  </div>
+                )}
               </>
             )}
           </div>

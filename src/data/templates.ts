@@ -15,6 +15,11 @@ export const templates: Template[] = [
     id: "regional",
     name: "Направити на область",
     content: "regional.docx"
+  },
+  {
+    id: "free",
+    name: "Довільний текст",
+    content: "regional.docx"
   }
 ];
 
