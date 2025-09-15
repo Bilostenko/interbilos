@@ -146,12 +146,7 @@ const MainContent: React.FC = () => {
 
             {!selectedTemplate && (
               <div className="flex justify-center items-center py-10">
-                <DotLottieReact src="/animations/tenor.lotti" loop autoplay />
-                {/* <img
-                  src="/funny-monkey.gif"
-                  alt="Мавпа їсть банан"
-                  className="w-40 h-40 object-contain"
-                /> */}
+                <DotLottieReact src="/animations/tenor.lottie" loop autoplay />
               </div>
             )}
 
