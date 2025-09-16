@@ -70,27 +70,29 @@ const MainContent: React.FC = () => {
     }
   }, [selectedTemplate, verificationData, uploadedFile?.name, dispatch]);
 
-  const handleDownloadResponse = async () => {
-    if (!selectedTemplate) {
-      alert("Please select a template before downloading.");
-      return;
-    }
+ const handleDownloadResponse = async () => {
+  if (!selectedTemplate) {
+    alert("Please select a template before downloading.");
+    return;
+  }
 
-    if (!analysisData) {
-      alert("Analysis data is missing.");
-      return;
-    }
+  if (!analysisData) {
+    alert("Analysis data is missing.");
+    return;
+  }
 
-    const referenceText =
-      (analysisData.date || "") === "Немає"
-        ? analysisData.reference
-        : `${analysisData.reference} dated ${analysisData.date}`;
+  const referenceText =
+    (analysisData.date || "") === "Немає"
+      ? analysisData.reference
+      : `${analysisData.reference} dated ${analysisData.date}`;
 
-    // Формуємо об'єкт даних для підстановки
+  let docxData: Record<string, string | boolean> = {};
+
+  if (selectedTemplate.id === "identification") {
     const attachment_count =
       (verificationData.photo ? 1 : 0) + (verificationData.border ? 2 : 0);
 
-    const docxData = {
+    docxData = {
       sender: (analysisData.sender || "").toUpperCase(),
       reference_block: referenceText,
       name: verificationData.name || "",
@@ -104,15 +106,25 @@ const MainContent: React.FC = () => {
       attachment_count: attachment_count.toString(),
       urgency: urgency.toUpperCase(),
     };
+  }
 
-    await generateDocx({
-      templateUrl: `/templates/${selectedTemplate.content}`,
-      data: docxData,
-      outputFileName: `Response_${new Date().toISOString().split("T")[0]}.docx`,
-    });
-    // скидаємо всі інпути
-    dispatch(resetState());
-  };
+  if (selectedTemplate.id === "rejection") {
+    docxData = {
+      sender: (analysisData.sender || "").toUpperCase(),
+      reference_block: referenceText,
+      urgency: urgency.toUpperCase(),
+    };
+  }
+
+  await generateDocx({
+    templateUrl: `/templates/${selectedTemplate.content}`,
+    data: docxData,
+    outputFileName: `Response_${new Date().toISOString().split("T")[0]}.docx`,
+  });
+// скидаємо всі інпути
+  dispatch(resetState());
+};
+
 
   return (
     <div className="relative flex size-full min-h-screen flex-col bg-gray-50">
@@ -167,12 +179,10 @@ const MainContent: React.FC = () => {
                 )}
 
                 {selectedTemplate.id === "rejection" && (
-                  <div className="text-3xl font-bold text-red-500 text-center py-10">
-                    <ResponseDisplay
-                      onDownload={handleDownloadResponse}
-                      isGenerating={isGeneratingResponse}
-                    />
-                  </div>
+                  <ResponseDisplay
+                    onDownload={handleDownloadResponse}
+                    isGenerating={isGeneratingResponse}
+                  />
                 )}
 
                 {selectedTemplate.id === "regional" && (
