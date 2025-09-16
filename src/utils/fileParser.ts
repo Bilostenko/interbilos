@@ -9,7 +9,7 @@ export const parseFileToText = async (file: File): Promise<string> => {
 
   if (fileType === "application/pdf") {
     const text = await parsePdf(file);
-    console.log("Parsed text:", text);
+    // console.log("Parsed text:", text);
     return text;
   }
 

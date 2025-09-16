@@ -77,7 +77,7 @@ export const analyzeFile = createAsyncThunk<
       }
 
       const data = await response.json();
-      console.log("AI raw response:", data);
+      // console.log("AI raw response:", data);
       if (!data.summary) {
         throw new Error("Не вдалося створити переказ");
       }
