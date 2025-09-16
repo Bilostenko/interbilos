@@ -8,7 +8,7 @@ export const templates: Template[] = [
   },
   {
     id: "rejection",
-    name: "Відмова через недостатні дані",
+    name: "Відмова через недостатні дані особи",
     content: "rejection.docx"
   },
   {
