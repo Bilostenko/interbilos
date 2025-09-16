@@ -168,7 +168,10 @@ const MainContent: React.FC = () => {
 
                 {selectedTemplate.id === "rejection" && (
                   <div className="text-3xl font-bold text-red-500 text-center py-10">
-                    ДУПА
+                    <ResponseDisplay
+                      onDownload={handleDownloadResponse}
+                      isGenerating={isGeneratingResponse}
+                    />
                   </div>
                 )}
 
@@ -177,7 +180,7 @@ const MainContent: React.FC = () => {
                     ДУПА
                   </div>
                 )}
-                  {selectedTemplate.id === "free" && (
+                {selectedTemplate.id === "free" && (
                   <div className="text-3xl font-bold text-green-500 text-center py-10">
                     ДУПА
                   </div>
