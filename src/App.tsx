@@ -5,6 +5,7 @@ import { Header } from "./components/Header";
 import { UploadSection } from "./components/UploadSection";
 import { AIAnalysis } from "./components/AIAnalysis";
 import { VerificationInput } from "./components/VerificationInput";
+import { Regional } from "./components/Regional";
 import { TemplateSelection } from "./components/TemplateSelection";
 import { ResponseDisplay } from "./components/ResponseDisplay";
 import { useAppDispatch, useAppSelector } from "./store/hooks";
@@ -70,61 +71,60 @@ const MainContent: React.FC = () => {
     }
   }, [selectedTemplate, verificationData, uploadedFile?.name, dispatch]);
 
- const handleDownloadResponse = async () => {
-  if (!selectedTemplate) {
-    alert("Please select a template before downloading.");
-    return;
-  }
+  const handleDownloadResponse = async () => {
+    if (!selectedTemplate) {
+      alert("Please select a template before downloading.");
+      return;
+    }
 
-  if (!analysisData) {
-    alert("Analysis data is missing.");
-    return;
-  }
+    if (!analysisData) {
+      alert("Analysis data is missing.");
+      return;
+    }
 
-  const referenceText =
-    (analysisData.date || "") === "Немає"
-      ? analysisData.reference
-      : `${analysisData.reference} dated ${analysisData.date}`;
+    const referenceText =
+      (analysisData.date || "") === "Немає"
+        ? analysisData.reference
+        : `${analysisData.reference} dated ${analysisData.date}`;
 
-  let docxData: Record<string, string | boolean> = {};
+    let docxData: Record<string, string | boolean> = {};
 
-  if (selectedTemplate.id === "identification") {
-    const attachment_count =
-      (verificationData.photo ? 1 : 0) + (verificationData.border ? 2 : 0);
+    if (selectedTemplate.id === "identification") {
+      const attachment_count =
+        (verificationData.photo ? 1 : 0) + (verificationData.border ? 2 : 0);
 
-    docxData = {
-      sender: (analysisData.sender || "").toUpperCase(),
-      reference_block: referenceText,
-      name: verificationData.name || "",
-      date_of_birth: verificationData.date_of_birth || "",
-      residence_address: verificationData.residenceAddress || "",
-      passport: verificationData.passport || "",
-      criminal_records: verificationData.criminalRecords || "",
-      additional_info: verificationData.additionalInfo || "",
-      photo: verificationData.photo,
-      border: verificationData.border,
-      attachment_count: attachment_count.toString(),
-      urgency: urgency.toUpperCase(),
-    };
-  }
+      docxData = {
+        sender: (analysisData.sender || "").toUpperCase(),
+        reference_block: referenceText,
+        name: verificationData.name || "",
+        date_of_birth: verificationData.date_of_birth || "",
+        residence_address: verificationData.residenceAddress || "",
+        passport: verificationData.passport || "",
+        criminal_records: verificationData.criminalRecords || "",
+        additional_info: verificationData.additionalInfo || "",
+        photo: verificationData.photo,
+        border: verificationData.border,
+        attachment_count: attachment_count.toString(),
+        urgency: urgency.toUpperCase(),
+      };
+    }
 
-  if (selectedTemplate.id === "rejection") {
-    docxData = {
-      sender: (analysisData.sender || "").toUpperCase(),
-      reference_block: referenceText,
-      urgency: urgency.toUpperCase(),
-    };
-  }
+    if (selectedTemplate.id === "rejection") {
+      docxData = {
+        sender: (analysisData.sender || "").toUpperCase(),
+        reference_block: referenceText,
+        urgency: urgency.toUpperCase(),
+      };
+    }
 
-  await generateDocx({
-    templateUrl: `/templates/${selectedTemplate.content}`,
-    data: docxData,
-    outputFileName: `Response_${new Date().toISOString().split("T")[0]}.docx`,
-  });
-// скидаємо всі інпути
-  dispatch(resetState());
-};
-
+    await generateDocx({
+      templateUrl: `/templates/${selectedTemplate.content}`,
+      data: docxData,
+      outputFileName: `Response_${new Date().toISOString().split("T")[0]}.docx`,
+    });
+    // скидаємо всі інпути
+    dispatch(resetState());
+  };
 
   return (
     <div className="relative flex size-full min-h-screen flex-col bg-gray-50">
@@ -186,9 +186,9 @@ const MainContent: React.FC = () => {
                 )}
 
                 {selectedTemplate.id === "regional" && (
-                  <div className="text-3xl font-bold text-blue-500 text-center py-10">
-                    ДУПА
-                  </div>
+                  <>
+                    <Regional />
+                  </>
                 )}
                 {selectedTemplate.id === "free" && (
                   <div className="text-3xl font-bold text-green-500 text-center py-10">

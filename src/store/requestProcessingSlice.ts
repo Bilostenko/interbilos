@@ -6,7 +6,7 @@ import type { AnalysisResult } from "../components/AIAnalysis";
 export interface Template {
   id: string;
   name: string;
-  content: string;
+  content?: string;
 }
 
 interface RequestProcessingState {
